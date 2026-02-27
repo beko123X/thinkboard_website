@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base:'/',
+  base: '/thinkboard_website/',  // هذا يبقى كما هو
   server: {
     port: 5173,
     host: true,
@@ -11,6 +11,6 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false, // false للإنتاج
+    sourcemap: false,
   }
 })
