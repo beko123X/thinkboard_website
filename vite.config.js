@@ -3,16 +3,15 @@ import react from '@vitejs/plugin-react'
 import process from 'node:process'
 
 export default defineConfig(({ mode }) => {
-  // تحميل متغيرات البيئة
   const env = loadEnv(mode, process.cwd(), '')
 
-  // التحقق مما إذا كنا على Netlify أو أي بيئة استضافة جذرية أخرى
-  // Netlify يضع متغير NETLIFY كـ true بشكل افتراضي في بيئة البناء
-  const isNetlify = process.env.NETLIFY === 'true' || env.VITE_NETLIFY === 'true';
+  // Netlify يضيف متغير بيئة اسمه NETLIFY ويكون true تلقائياً أثناء البناء
+  // نستخدم || لضمان التحقق من كلا المصدرين
+  const isNetlify = process.env.NETLIFY === 'true' || env.VITE_IS_NETLIFY === 'true';
 
   return {
     plugins: [react()],
-    // إذا كنت على Netlify استخدم '/' وإذا كنت على GitHub Pages استخدم اسم المستودع
+    // إذا اكتشفنا أننا على Netlify نستخدم '/'، وإلا نستخدم مسار GitHub Pages
     base: isNetlify ? '/' : '/thinkboard_website/',
     server: {
       port: 5173,
@@ -21,9 +20,8 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: 'dist',
-      sourcemap: false,
-      // تأكد من تنظيف المجلد قبل البناء
       emptyOutDir: true,
+      sourcemap: false,
     }
   }
 })
